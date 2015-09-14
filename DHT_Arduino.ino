@@ -29,13 +29,13 @@ void loop() {
 
   if (DHT.read11(dht_dpin) == 0)
   {
-    str_humidity = "H: " + String(int(DHT.humidity)) + "%";
-    str_temperature = "T: " + String(int(DHT.temperature)) + "C";
+    str_humidity = "H:" + String(int(DHT.humidity)) + "%";
+    str_temperature = "T:" + String(int(DHT.temperature)) + "C";
   }
   else
   {
-    str_humidity = "H: --%";
-    str_temperature = "T: --C";
+    str_humidity = "H:--%";
+    str_temperature = "T:--C";
     DHT_Status = 1;
   }
 
