@@ -2,12 +2,12 @@
 #include <dht.h>
 #include <LiquidCrystal.h>
 
-#define dht_dpin 2              //Data from Pin 2
 #define led_dpin 13             //LED PIN
-#define Interval_Read     500   //500ms
+#define Interval_Read     1000  //1000ms
 #define en_Display        0
 #define en_LED            1
 
+int dht_dpin[] = {2,3,4};        //Data from Pin 2-4
 dht DHT;
 LiquidCrystal lcd(12, 11, 3, 4, 5, 6);  // RS, E, D4, D5, D6, D7 pin of LCD
 int time_tick = 0;
@@ -25,26 +25,31 @@ void loop() {
 
   String str_humidity;
   String str_temperature;
+  String str_Output = "";
   int DHT_Status = 0;
-
-  if (DHT.read11(dht_dpin) == 0)
+  int i;
+  for(i=0;i<3;i++)
   {
-    str_humidity = "H:" + String(int(DHT.humidity)) + "%";
-    str_temperature = "T:" + String(int(DHT.temperature)) + "C";
-  }
-  else
-  {
-    str_humidity = "H:--%";
-    str_temperature = "T:--C";
-    DHT_Status = 1;
+    if (DHT.read22(dht_dpin[i]) == 0)
+    {
+      str_humidity = "H:" + String(int(DHT.humidity)) + "%,";
+      str_temperature = "T:" + String(int(DHT.temperature)) + "C,";
+    }
+    else
+    {
+      str_humidity = "H:--%,";
+      str_temperature = "T:--C,";
+      DHT_Status = 1;
+    }
+    str_Output = str_Output + str_humidity + str_temperature;
   }
 
-  Serial.println(str_humidity + ", " + str_temperature);
+  Serial.println(str_Output);
 
   if (en_Display) {
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print(str_humidity + ", " + str_temperature);
+    lcd.print(str_Output);
     if (time_tick == 0) lcd.print("_");
   }
 
@@ -58,6 +63,3 @@ void loop() {
 
   delay(Interval_Read);
 }
-
-
-
