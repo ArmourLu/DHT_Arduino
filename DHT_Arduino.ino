@@ -25,19 +25,16 @@ void loop() {
   {
     if (DHT.read22(dht_dpin[i]) == 0)
     {
-      Serial.print("H:");
-      Serial.print(DHT.humidity);
-      Serial.print("%,");
-      Serial.print("T:");
       Serial.print(DHT.temperature);
-      Serial.print("C");
+      Serial.print(",");
+      Serial.print(DHT.humidity);
     }
     else
     {
-      Serial.print("H:--%,");
-      Serial.print("T:--C,");
+      Serial.print("--,--");
       DHT_Status = 1;
     }
+    if(i!=2) Serial.print(",");
   }
 
   Serial.println();
